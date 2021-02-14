@@ -29,16 +29,15 @@ const DateScreen = (props) => {
   const {selectedStartDate} = this.state;
   const startDate = selectedStartDate ? selectedStartDate.toString() : '';
   return (
-    <Fragment style={styles.container}>
-      <Text style={styles.selectedDate}>Selected Day: {date1}</Text>
-      <CalendarPicker
-        onDateChange={(date0) => this.onDateChange(date0)}
-        startFromMonday
-      />
-      <Text style={styles.hours}>HOURS</Text>
-      <Text style={styles.stats}>Today: </Text>
-      <Text style={styles.stats}>This week: </Text>
-      <Text style={styles.stats}>This month: </Text>
+    <Fragment>
+      <View style={styles.container}>
+        <Text style={styles.selectedDate}>Selected Day: {date1}</Text>
+        <CalendarPicker onDateChange={this.onDateChange} startFromMonday />
+        <Text style={styles.hours}>HOURS</Text>
+        <Text style={styles.stats}>Today: </Text>
+        <Text style={styles.stats}>This week: </Text>
+        <Text style={styles.stats}>This month: </Text>
+      </View>
     </Fragment>
   );
 };
