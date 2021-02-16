@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, Fragment} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import DateScreenContainer from './DateScreenContainer';
 import WorkTimeEditScreenContainer from './WorkTimeEditScreenContainer';
@@ -6,7 +6,12 @@ import ProjectsContainer from './ProjectsScreenContainer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
+
 export default function MainContainer(props) {
+  var date0 = new Date();
+  var date1 =
+    date0.getDate() + '.' + (date0.getMonth() + 1) + '.' + date0.getFullYear();
+  const [date, setDate] = useState(date1);
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -30,10 +35,22 @@ export default function MainContainer(props) {
         inactiveTintColor: 'gray',
         labelStyle: {fontSize: 20},
       }}>
-      <Tab.Screen name="Calendar" component={DateScreenContainer} />
-      <Tab.Screen name="Work time" component={WorkTimeEditScreenContainer} />
+      <Tab.Screen
+        name="Calendar"
+        children={() => (
+          <DateScreenContainer selectedDate={date} setSelectedDate={setDate} />
+        )}
+      />
+      <Tab.Screen
+        name="Work Time"
+        children={() => (
+          <WorkTimeEditScreenContainer
+            selectedDate={date}
+            setSelectedDate={setDate}
+          />
+        )}
+      />
       <Tab.Screen name="Projects" component={ProjectsContainer} />
     </Tab.Navigator>
   );
 }
-
