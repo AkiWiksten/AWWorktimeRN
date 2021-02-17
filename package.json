@@ -17,6 +17,7 @@
     "@react-navigation/native": "^5.9.2",
     "core-js": "^3.8.3",
     "moment": "^2.29.1",
+    "mongoose": "^5.11.16",
     "react": "16.13.1",
     "react-clock": "^3.0.0",
     "react-dom": "^16.14.0",
