@@ -1,39 +1,38 @@
-import React, {useState, Dispatch, Fragment, SetStateAction} from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  NativeModules,
-  TouchableOpacity,
-  ScrollView,
-  Picker,
-  Button,
-  Alert,
-} from 'react-native';
+import React, {Dispatch, SetStateAction} from 'react';
+import {StyleSheet, Text, View, TextInput} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 
-const MyTextInput = (props: any) => {
+type MtiProps = {
+  timeType: Object;
+  timeTypeString: string;
+  validationText: string;
+  withMinus: boolean;
+  time: string;
+  setTime: Dispatch<SetStateAction<string>>;
+};
+
+const MyTextInput: React.FC<MtiProps> = (props) => {
   const {control, handleSubmit, errors} = useForm();
   console.log('errors', errors);
   console.log('MyTextInput', props);
-  const onSubmit = (d: any) => console.log(d);
+  const onSubmit = (d: any) => {
+    console.log('onSubmit:', d);
+    props.setTime(d);
+  };
   return (
     <View style={styles.myTextInputView}>
       <Text style={styles.myTextInputText}>{props.timeTypeString}</Text>
       <View>
         <Controller
           control={control}
-          render={({onChange, onBlur, value}) => (
+          render={({onChange, value}) => (
             <TextInput
               autoFocus={true}
               style={styles.myTextInput}
-              onBlur={onBlur}
+              onBlur={handleSubmit(onSubmit)}
               onChangeText={(text) => onChange(text)}
               value={value}
               placeholder="Time"
-              onSubmitEditing={handleSubmit(onSubmit)}
             />
           )}
           name="dweName"

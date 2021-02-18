@@ -18,14 +18,17 @@ import MyTextInput from '../components/MyTextInput';
 type WsProps = {
   selectedDate: string;
   setSelectedDate: Dispatch<SetStateAction<string>>;
+  beginTime: string;
+  setBeginTime: Dispatch<SetStateAction<string>>;
+  endTime: string;
+  setEndTime: Dispatch<SetStateAction<string>>;
+  dailyWorkEstimate: string;
+  setDailyWorkEstimate: Dispatch<SetStateAction<string>>;
+  workTimeTotal: string;
+  setWorkTimeTotal: Dispatch<SetStateAction<string>>;
 };
 
 const WorkTimeEditScreen: React.FC<WsProps> = (props) => {
-  const [beginTime, setBeginTime] = useState('8:00');
-  const [endTime, setEndTime] = useState('16:00');
-  const [dailyWorkEstimate, setDailyWorkEstimate] = useState('7:30');
-  const [workTimeTotal, setWorkTimeTotal] = useState('0:00');
-
   const TimeEnum = Object.freeze({
     beginTime: 1,
     endTime: 2,
@@ -43,26 +46,30 @@ const WorkTimeEditScreen: React.FC<WsProps> = (props) => {
         <MyDatePicker
           timeType={TimeEnum.beginTime}
           timeTypeString="Begin Time:"
-          time={beginTime}
+          time={props.beginTime}
+          setTime={props.setBeginTime}
         />
         <MyDatePicker
           timeType={TimeEnum.endTime}
           timeTypeString="End Time:"
-          time={endTime}
+          time={props.endTime}
+          setTime={props.setEndTime}
         />
         <MyTextInput
           timeType={TimeEnum.dailyWorkEstimate}
           timeTypeString="Daily Work Estimate:"
           validationText="Example 29:45"
           withMinus={false}
-          time={dailyWorkEstimate}
+          time={props.dailyWorkEstimate}
+          setTime={props.setDailyWorkEstimate}
         />
         <MyTextInput
           timeType={TimeEnum.workTimeTotal}
           timeTypeString="Work Time Total:"
           validationText="Example 29:45 or -9:45"
           withMinus={true}
-          time={workTimeTotal}
+          time={props.workTimeTotal}
+          setTime={props.setWorkTimeTotal}
         />
       </ScrollView>
     </Fragment>

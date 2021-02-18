@@ -13,8 +13,16 @@ import {
   Alert,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+var dateFormat = require('dateformat');
 
-const MyDatePicker = (props: any) => {
+type MdpProps = {
+  timeType: Object;
+  timeTypeString: string;
+  time: string;
+  setTime: Dispatch<SetStateAction<string>>;
+};
+
+const MyDatePicker: React.FC<MdpProps> = (props) => {
   const [date, setDate] = useState('9:00');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -27,8 +35,9 @@ const MyDatePicker = (props: any) => {
   };
 
   const handleConfirm = (selectedDate: Date) => {
-    setDate(selectedDate.getHours() + ':' + selectedDate.getMinutes());
-    console.warn('A date has been picked: ', selectedDate);
+    let date0 = dateFormat(selectedDate, 'h:MM');
+    console.warn('handleConfirm: ', date0);
+    props.setTime(date0);
     hideDatePicker();
   };
 

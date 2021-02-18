@@ -16,6 +16,7 @@
     "@react-navigation/bottom-tabs": "^5.11.7",
     "@react-navigation/native": "^5.9.2",
     "core-js": "^3.8.3",
+    "dateformat": "^4.5.1",
     "moment": "^2.29.1",
     "mongoose": "^5.11.16",
     "react": "16.13.1",
