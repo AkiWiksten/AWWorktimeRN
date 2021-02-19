@@ -1,6 +1,7 @@
 import React, {Fragment, Dispatch, SetStateAction} from 'react';
 import CalendarPicker from 'react-native-calendar-picker';
 import {StyleSheet, Text, View} from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 
 type DsProps = {
   selectedDate: string;
@@ -14,6 +15,18 @@ const DateScreen: React.FC<DsProps> = (props) => {
       date._i.day + '.' + (date._i.month + 1) + '.' + date._i.year,
     );
   };
+  useFocusEffect(
+    React.useCallback(() => {
+      // Do something when the screen is focused
+      console.log('useFocusEffect: is focused');
+      return () => {
+        // Do something when the screen is unfocused
+        // Useful for cleanup functions
+
+        console.log('useFocusEffect: is not focused');
+      };
+    }, []),
+  );
   return (
     <Fragment>
       <View style={styles.container}>
