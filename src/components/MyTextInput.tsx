@@ -1,5 +1,11 @@
 import React, {Dispatch, SetStateAction} from 'react';
-import {StyleSheet, Text, View, TextInput} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableHighlight,
+} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 
 type MtiProps = {
@@ -19,54 +25,64 @@ const MyTextInput: React.FC<MtiProps> = (props) => {
     console.log('onSubmit:', d);
     props.setTime(d);
   };
+  const onPressTitle = () => {
+    
+  };
   return (
-    <View style={styles.myTextInputView}>
-      <Text style={styles.myTextInputText}>{props.timeTypeString}</Text>
-      <View>
-        <Controller
-          control={control}
-          render={({onChange, value}) => (
-            <TextInput
-              autoFocus={true}
-              style={styles.myTextInput}
-              onBlur={handleSubmit(onSubmit)}
-              onChangeText={(text) => onChange(text)}
-              value={value}
-              placeholder="Time"
-            />
+    <TouchableHighlight
+      style={styles.myDatePickerText}
+      underlayColor={'#AAAAAA'}
+      onPress={onPressTitle}>
+      <View style={styles.myTextInputView}>
+        <Text style={styles.myTextInputText}>{props.timeTypeString}</Text>
+        <View>
+          <Controller
+            control={control}
+            render={({onChange, value}) => (
+              <TextInput
+                autoFocus={true}
+                style={styles.myTextInput}
+                onBlur={handleSubmit(onSubmit)}
+                onChangeText={(text) => onChange(text)}
+                value={value}
+                placeholder="Time"
+              />
+            )}
+            name="dweName"
+            rules={{
+              pattern: props.withMinus
+                ? /[-]?[0-9]+:[0-5][0-9]$/
+                : /[0-9]+:[0-5][0-9]$/,
+            }}
+            defaultValue={props.time}
+          />
+          {errors.dweName && (
+            <Text style={styles.validationText}>{props.validationText}</Text>
           )}
-          name="dweName"
-          rules={{
-            pattern: props.withMinus
-              ? /[-]?[0-9]+:[0-5][0-9]$/
-              : /[0-9]+:[0-5][0-9]$/,
-          }}
-          defaultValue={props.time}
-        />
-        {errors.dweName && (
-          <Text style={styles.validationText}>{props.validationText}</Text>
-        )}
+        </View>
       </View>
-    </View>
+    </TouchableHighlight>
   );
 };
 
 const styles = StyleSheet.create({
+  myDatePickerText: {
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: 'black',
+    textAlign: 'center',
+    backgroundColor: '#DDDDDD',
+  },
   validationText: {
     color: 'red',
   },
   myTextInputView: {
     fontSize: 18,
     fontWeight: 'bold',
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: 'black',
     flexDirection: 'row',
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     paddingLeft: 20,
-    paddingRight: 20, 
+    paddingRight: 20,
   },
   myTextInput: {
     fontSize: 18,
