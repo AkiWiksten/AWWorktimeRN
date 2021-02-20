@@ -1,15 +1,21 @@
 import React, {useState, Fragment, useEffect} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
 import DateScreenContainer from './DateScreenContainer';
 import WorkTimeEditScreenContainer from './WorkTimeEditScreenContainer';
-import ProjectsContainer from './ProjectsScreenContainer';
+import ProjectsScreenContainer from './ProjectsScreenContainer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import AppStateCheck from './AppStateCheck';
+import AppStateCheck from '../other/AppStateCheck';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  NavigationContainer,
+  getFocusedRouteNameFromRoute,
+} from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
-export default function MainContainer(props) {
+function MainContainer() {
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem('@selectedDateKey');
@@ -38,19 +44,35 @@ export default function MainContainer(props) {
   const [date, setDate] = useState('');
   console.log('MainContainer: ', date);
 
-  return (
-    <Fragment>
+  function getHeaderTitle(route: any) {
+    // If the focused route is not found, we need to assume it's the initial screen
+    // This can happen during if there hasn't been any navigation inside the screen
+    // In our case, it's "Feed" as that's the first screen inside the navigator
+    const routeName = getFocusedRouteNameFromRoute(route) ?? 'Calendar';
+
+    switch (routeName) {
+      case 'Calendar':
+        return 'Select which date to edit';
+      case 'Work Time':
+        return 'Edit work time fields';
+      case 'Projects':
+        return 'Projects';
+    }
+  }
+
+  function HomeTabs() {
+    return (
       <Tab.Navigator
         screenOptions={({route}) => ({
           tabBarIcon: ({focused, color, size}) => {
             let iconName;
 
-            if (route.name === 'Home') {
-              iconName = focused
-                ? 'ios-information-circle'
-                : 'ios-information-circle-outline';
-            } else if (route.name === 'Settings') {
-              iconName = focused ? 'ios-list-box' : 'ios-list';
+            if (route.name === 'Calendar') {
+              iconName = focused ? 'calendar' : 'calendar-outline';
+            } else if (route.name === 'Work Time') {
+              iconName = focused ? 'time' : 'time-outline';
+            } else if (route.name === 'Projects') {
+              iconName = focused ? 'list-box' : 'list';
             }
 
             // You can return any component that you like here!
@@ -80,9 +102,33 @@ export default function MainContainer(props) {
             />
           )}
         />
-        <Tab.Screen name="Projects" component={ProjectsContainer} />
+        <Tab.Screen
+          name="Projects"
+          children={() => (
+            <ProjectsScreenContainer
+              selectedDate={date}
+              setSelectedDate={setDate}
+            />
+          )}
+        />
       </Tab.Navigator>
+    );
+  }
+
+  return (
+    <Fragment>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={HomeTabs}
+          options={({route}) => ({
+            headerTitle: getHeaderTitle(route),
+          })}
+        />
+      </Stack.Navigator>
       <AppStateCheck selectedDate={date} setSelectedDate={setDate} />
     </Fragment>
   );
 }
+
+export default MainContainer;

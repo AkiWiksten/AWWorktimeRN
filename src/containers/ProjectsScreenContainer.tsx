@@ -1,11 +1,18 @@
-import React from 'react';
+import React, {Dispatch, SetStateAction} from 'react';
 import {View} from 'react-native';
 import ProjectsScreen from '../components/ProjectsScreen';
 
-export default function ProjectsScreenContainer(props) {
+type PscProps = {
+  selectedDate: string;
+  setSelectedDate: Dispatch<SetStateAction<string>>;
+};
+
+const ProjectsScreenContainer: React.FC<PscProps> = (props) => {
   return (
     <View>
-      <ProjectsScreen />
+      <ProjectsScreen {...props} />
     </View>
   );
-}
+};
+
+export default ProjectsScreenContainer;
