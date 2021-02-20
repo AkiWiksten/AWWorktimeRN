@@ -12,6 +12,7 @@ import {
   Button,
   Alert,
 } from 'react-native';
+import {TouchableHighlight} from 'react-native-gesture-handler';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 var dateFormat = require('dateformat');
 
@@ -46,9 +47,14 @@ const MyDatePicker: React.FC<MdpProps> = (props) => {
   };
   return (
     <Fragment>
-      <Text style={styles.myDatePickerText} onPress={onPressTitle}>
-        {props.timeTypeString} {props.time}
-      </Text>
+      <TouchableHighlight
+        style={styles.myDatePickerText}
+        underlayColor={'#AAAAAA'}
+        onPress={onPressTitle}>
+        <Text style={styles.touchableText}>
+          {props.timeTypeString} {props.time}
+        </Text>
+      </TouchableHighlight>
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="time"
@@ -62,14 +68,15 @@ const MyDatePicker: React.FC<MdpProps> = (props) => {
 const styles = StyleSheet.create({
   myDatePickerText: {
     padding: 10,
-    fontSize: 18,
-    fontWeight: 'bold',
     borderRadius: 4,
     borderWidth: 1,
     borderColor: 'black',
-    flexDirection: 'row',
-    flex: 1,
-    alignSelf: 'stretch',
+    textAlign: 'center',
+    backgroundColor: '#DDDDDD',
+  },
+  touchableText: {
+    fontWeight: 'bold',
+    fontSize: 18,
     textAlign: 'center',
   },
 });

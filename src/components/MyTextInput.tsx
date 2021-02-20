@@ -63,9 +63,10 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     flexDirection: 'row',
     flex: 1,
-    alignSelf: 'stretch',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingLeft: 20,
+    paddingRight: 20, 
   },
   myTextInput: {
     fontSize: 18,

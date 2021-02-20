@@ -42,36 +42,38 @@ const WorkTimeEditScreen: React.FC<WsProps> = (props) => {
       <Text style={{textAlign: 'center'}}>
         Every field has at least a time in hours and minutes.
       </Text>
-      <ScrollView contentContainerStyle={[styles.container]}>
-        <MyDatePicker
-          timeType={TimeEnum.beginTime}
-          timeTypeString="Begin Time:"
-          time={props.beginTime}
-          setTime={props.setBeginTime}
-        />
-        <MyDatePicker
-          timeType={TimeEnum.endTime}
-          timeTypeString="End Time:"
-          time={props.endTime}
-          setTime={props.setEndTime}
-        />
-        <MyTextInput
-          timeType={TimeEnum.dailyWorkEstimate}
-          timeTypeString="Daily Work Estimate:"
-          validationText="Example 29:45"
-          withMinus={false}
-          time={props.dailyWorkEstimate}
-          setTime={props.setDailyWorkEstimate}
-        />
-        <MyTextInput
-          timeType={TimeEnum.workTimeTotal}
-          timeTypeString="Work Time Total:"
-          validationText="Example 29:45 or -9:45"
-          withMinus={true}
-          time={props.workTimeTotal}
-          setTime={props.setWorkTimeTotal}
-        />
-      </ScrollView>
+      <View style={[styles.container]}>
+        <ScrollView>
+          <MyDatePicker
+            timeType={TimeEnum.beginTime}
+            timeTypeString="Begin Time:"
+            time={props.beginTime}
+            setTime={props.setBeginTime}
+          />
+          <MyDatePicker
+            timeType={TimeEnum.endTime}
+            timeTypeString="End Time:"
+            time={props.endTime}
+            setTime={props.setEndTime}
+          />
+          <MyTextInput
+            timeType={TimeEnum.dailyWorkEstimate}
+            timeTypeString="Daily Work Estimate:"
+            validationText="Example 29:45"
+            withMinus={false}
+            time={props.dailyWorkEstimate}
+            setTime={props.setDailyWorkEstimate}
+          />
+          <MyTextInput
+            timeType={TimeEnum.workTimeTotal}
+            timeTypeString="Work Time Total:"
+            validationText="Example 29:45 or -9:45"
+            withMinus={true}
+            time={props.workTimeTotal}
+            setTime={props.setWorkTimeTotal}
+          />
+        </ScrollView>
+      </View>
     </Fragment>
   );
 };
@@ -84,10 +86,9 @@ const styles = StyleSheet.create({
   },
   container: {
     justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     paddingTop: 22,
     marginBottom: 100,
-    flexDirection: 'column',
   },
 });
 
