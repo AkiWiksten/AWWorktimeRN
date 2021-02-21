@@ -17,7 +17,6 @@ type AscProps = {
 const AppStateCheck: React.FC<AscProps> = (props) => {
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
-  console.log('AppStateCheck', props.selectedDate);
 
   useEffect(() => {
     AppState.addEventListener('change', _handleAppStateChange);
@@ -48,7 +47,6 @@ const AppStateCheck: React.FC<AscProps> = (props) => {
       const value = await AsyncStorage.getItem('@selectedDateKey');
       if (value !== null) {
         // value previously stored
-        console.log('getData', value);
         props.setSelectedDate(value);
       }
     } catch (e) {

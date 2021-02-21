@@ -1,3 +1,4 @@
+import { useFocusEffect } from '@react-navigation/native';
 import React, {Dispatch, Fragment, SetStateAction} from 'react';
 import {useState} from 'react';
 import {
@@ -79,6 +80,18 @@ const ProjectsScreen: React.FC<PsProps> = (props) => {
     //state.data1.splice(state.selectedItem1, 1)
     //forceUpdate()
   };
+  useFocusEffect(
+    React.useCallback(() => {
+      // Do something when the screen is focused
+      console.log('useFocusEffect: ProjectsScreen is focused');
+      return () => {
+        // Do something when the screen is unfocused
+        // Useful for cleanup functions
+
+        console.log('useFocusEffect: ProjectsScreen is not focused');
+      };
+    }, []),
+  );
   return (
     <Fragment>
       <Text style={s.date}>Selected Day: {props.selectedDate}</Text>

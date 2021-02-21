@@ -12,6 +12,7 @@ import {
   getFocusedRouteNameFromRoute,
 } from '@react-navigation/native';
 import translations from '../other/Localization';
+import {InitDatabase} from '../other/Database';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -73,7 +74,7 @@ function MainContainer() {
             } else if (route.name === 'Work Time') {
               iconName = focused ? 'time' : 'time-outline';
             } else if (route.name === 'Projects') {
-              iconName = focused ? 'list-box' : 'list';
+              iconName = focused ? 'list' : 'list-outline';
             }
 
             // You can return any component that you like here!
@@ -115,7 +116,7 @@ function MainContainer() {
       </Tab.Navigator>
     );
   }
-
+  InitDatabase();
   return (
     <Fragment>
       <Stack.Navigator>

@@ -21,8 +21,6 @@ type MtiProps = {
 
 const MyTextInput: React.FC<MtiProps> = (props) => {
   const {control, handleSubmit, errors} = useForm();
-  console.log('errors', errors);
-  console.log('MyTextInput', props);
   const onSubmit = (d: any) => {
     console.log('onSubmit:', d);
     props.setTime(d);

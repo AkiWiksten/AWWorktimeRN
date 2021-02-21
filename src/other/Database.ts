@@ -1,22 +1,152 @@
-import {openDatabase} from 'react-native-sqlite-storage';
+import SQLite from 'react-native-sqlite-storage';
 import React, {useEffect} from 'react';
-var db = openDatabase({name: 'WorkTimeDatabase.db'});
+import {Alert} from 'react-native';
+import {Dispatch} from 'react';
+import {SetStateAction} from 'react';
+
+const dbName = 'workTime.db';
+const errorCB = (err: any) => {
+  console.log('SQL Error: ' + err);
+};
+
+const successCB = (message) => {
+  console.log('SQL executed fine: ' + message);
+};
+
+const openCB = () => {
+  console.log('Database OPENED');
+};
+
+const openMyDatabase = () => {
+  return SQLite.openDatabase(
+    {
+      name: dbName,
+      createFromLocation: 2,
+      location: 'Library',
+    },
+    openCB,
+    errorCB,
+  );
+};
+
+const executeMySql = (txn: any, sql: string) => {
+  txn.executeSql(
+    sql,
+    [],
+    function (tx, res) {
+      successCB(res.rows.length + ' 0');
+    },
+    (tx, err) => errorCB(err),
+  );
+};
+
+export const DeleteDatabase = () => {
+  return SQLite.deleteDatabase(
+    {
+      name: dbName,
+      createFromLocation: 1,
+      location: 'Library',
+    },
+    openCB,
+    errorCB,
+  );
+};
 
 export const InitDatabase = () => {
-  db.transaction(function (txn: any) {
-    txn.executeSql(
-      "SELECT name FROM sqlite_master WHERE type='table' AND name='table_user'",
-      [],
-      function (tx: any, res: any) {
-        console.log('item:', res.rows.length);
-        if (res.rows.length === 0) {
-          txn.executeSql('DROP TABLE IF EXISTS table_user', []);
-          txn.executeSql(
-            'CREATE TABLE IF NOT EXISTS table_user(user_id INTEGER PRIMARY KEY AUTOINCREMENT, user_name VARCHAR(20), user_contact INT(10), user_address VARCHAR(255))',
-            [],
-          );
+  console.log('InitDatabase');
+  useEffect(() => {
+    openMyDatabase().transaction(function (txn) {
+      executeMySql(
+        txn,
+        'CREATE TABLE IF NOT EXISTS WorkTime(Date VARCHAR PRIMARY KEY, ' +
+          'BeginTime VARCHAR, EndTime VARCHAR, DailyWorkEstimate VARCHAR, LunchBreakBegin VARCHAR, ' +
+          'LunchBreakEnd VARCHAR, LunchBreakEstimate VARCHAR, BreakBegin VARCHAR, BreakEnd VARCHAR, ' +
+          'WorkTimeToday VARCHAR, FlextimeToday VARCHAR)',
+      );
+      executeMySql(
+        txn,
+        'CREATE TABLE IF NOT EXISTS WorkTimeOnce(' +
+          'DailyWorkEstimate VARCHAR, LunchBreakEstimate VARCHAR, ' +
+          'WorkTimeTotal VARCHAR, FlextimeTotal VARCHAR)',
+      );
+      executeMySql(
+        txn,
+        'CREATE TABLE IF NOT EXISTS WorkTimeProject(' +
+          'ProjectName VARCHAR, TimeToday VARCHAR, Date VARCHAR, ' +
+          'FOREIGN KEY(Date) REFERENCES WorkHour(Date))',
+      );
+    });
+  }, []);
+};
+
+export const UpdateCurrentWorkDay = (
+  beginTime: string,
+  endTime: string,
+  dailyWorkEstimate: string,
+  workTimeTotal: string,
+) => {
+  openMyDatabase().transaction(function (tx) {
+    tx.executeSql(
+      'INSERT INTO WorkTime (BeginTime, EndTime, DailyWorkEstimate) VALUES (?,?,?)',
+      [beginTime, endTime, dailyWorkEstimate],
+      (tx, results) => {
+        console.log('Results', results.rowsAffected);
+        if (results.rowsAffected > 0) {
+          console.log('WorkTime successful.');
+        } else {
+          Alert.alert('Registration Failed: WorkTime');
         }
       },
     );
   });
+  openMyDatabase().transaction(function (tx) {
+    tx.executeSql(
+      'DELETE FROM WorkTimeOnce',
+      [],
+      (tx, results) => {
+        console.log('Results delete', results.rowsAffected);
+        if (results.rowsAffected > 0) {
+          console.log('Delete successful.');
+        } else {
+          Alert.alert('Delete Failed.');
+        }
+      },
+      (tx, results) => {
+        console.log('error: ' + results);
+      },
+    );
+  });
+  openMyDatabase().transaction(function (tx) {
+    tx.executeSql(
+      'INSERT INTO WorkTimeOnce (WorkTimeTotal) VALUES (?)',
+      [workTimeTotal],
+      (tx, results) => {
+        console.log('Results', results.rowsAffected);
+        if (results.rowsAffected > 0) {
+          console.log('WorkTimeOnce successful.');
+        } else {
+          Alert.alert('Registration Failed: WorkTimeOnce');
+        }
+      },
+    );
+  });
+};
+
+export const ReadCurrentWorkDay = (
+  setBeginTime: Dispatch<SetStateAction<string>>,
+  setEndTime: Dispatch<SetStateAction<string>>,
+  setDailyWorkEstimate: Dispatch<SetStateAction<string>>,
+  setWorkTimeTotal: Dispatch<SetStateAction<string>>,
+) => {
+  useEffect(() => {
+    openMyDatabase().transaction((tx) => {
+      tx.executeSql('SELECT * FROM WorkTimeOnce', [], (tx, results) => {
+        var temp = [];
+        for (let i = 0; i < results.rows.length; ++i) {
+          temp.push(results.rows.item(i));
+        }
+        setFlatListItems(temp);
+      });
+    });
+  }, []);
 };

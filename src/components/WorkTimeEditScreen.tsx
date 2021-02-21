@@ -1,3 +1,4 @@
+import { useFocusEffect } from '@react-navigation/native';
 import React, {useState, Dispatch, Fragment, SetStateAction} from 'react';
 import {
   FlatList,
@@ -28,6 +29,8 @@ type WsProps = {
   setDailyWorkEstimate: Dispatch<SetStateAction<string>>;
   workTimeTotal: string;
   setWorkTimeTotal: Dispatch<SetStateAction<string>>;
+  screenUnfocused: Function;
+  screenFocused: Function;
 };
 
 const WorkTimeEditScreen: React.FC<WsProps> = (props) => {
@@ -37,7 +40,19 @@ const WorkTimeEditScreen: React.FC<WsProps> = (props) => {
     dailyWorkEstimate: 3,
     workTimeTotal: 10,
   });
-
+  useFocusEffect(
+    React.useCallback(() => {
+      // Do something when the screen is focused
+      console.log('useFocusEffect: WorkTimeEditScreen is focused');
+      props.screenFocused();
+      return () => {
+        // Do something when the screen is unfocused
+        // Useful for cleanup functions
+        props.screenUnfocused();
+        console.log('useFocusEffect: WorkTimeEditScreen is not focused');
+      };
+    }, []),
+  );
   return (
     <Fragment>
       <Text style={s.dateWtes}>
