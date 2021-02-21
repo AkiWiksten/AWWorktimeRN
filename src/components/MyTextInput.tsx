@@ -1,12 +1,14 @@
 import React, {Dispatch, SetStateAction} from 'react';
 import {
-  StyleSheet,
+  
   Text,
   View,
   TextInput,
   TouchableHighlight,
 } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
+import translations from '../other/Localization';
+const s = require('../other/myStyles');
 
 type MtiProps = {
   timeType: Object;
@@ -25,27 +27,25 @@ const MyTextInput: React.FC<MtiProps> = (props) => {
     console.log('onSubmit:', d);
     props.setTime(d);
   };
-  const onPressTitle = () => {
-    
-  };
+  const onPressTitle = () => {};
   return (
     <TouchableHighlight
-      style={styles.myDatePickerText}
+      style={s.myTouchableText}
       underlayColor={'#AAAAAA'}
       onPress={onPressTitle}>
-      <View style={styles.myTextInputView}>
-        <Text style={styles.myTextInputText}>{props.timeTypeString}</Text>
+      <View style={s.myTextInputView}>
+        <Text style={s.myTextInputText}>{props.timeTypeString}</Text>
         <View>
           <Controller
             control={control}
             render={({onChange, value}) => (
               <TextInput
                 autoFocus={true}
-                style={styles.myTextInput}
+                style={s.myTextInput}
                 onBlur={handleSubmit(onSubmit)}
                 onChangeText={(text) => onChange(text)}
                 value={value}
-                placeholder="Time"
+                placeholder={translations.time}
               />
             )}
             name="dweName"
@@ -57,44 +57,12 @@ const MyTextInput: React.FC<MtiProps> = (props) => {
             defaultValue={props.time}
           />
           {errors.dweName && (
-            <Text style={styles.validationText}>{props.validationText}</Text>
+            <Text style={s.validationText}>{props.validationText}</Text>
           )}
         </View>
       </View>
     </TouchableHighlight>
   );
 };
-
-const styles = StyleSheet.create({
-  myDatePickerText: {
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: 'black',
-    textAlign: 'center',
-    backgroundColor: '#DDDDDD',
-  },
-  validationText: {
-    color: 'red',
-  },
-  myTextInputView: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    flexDirection: 'row',
-    flex: 1,
-    paddingLeft: 20,
-    paddingRight: 20,
-  },
-  myTextInput: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  myTextInputText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    height: '100%',
-    padding: 10,
-  },
-});
 
 export default MyTextInput;

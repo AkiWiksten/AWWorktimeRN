@@ -1,6 +1,7 @@
 import React, {Dispatch, SetStateAction, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View} from 'react-native';
 import WorkTimeEditScreen from '../components/WorkTimeEditScreen';
+const s = require('../other/myStyles');
 
 type WscProps = {
   selectedDate: string;
@@ -13,7 +14,7 @@ const WorkTimeEditScreenContainer: React.FC<WscProps> = (props) => {
   const [dailyWorkEstimate, setDailyWorkEstimate] = useState('7:30');
   const [workTimeTotal, setWorkTimeTotal] = useState('0:00');
   return (
-    <View style={styles.parentContainer}>
+    <View style={s.parentContainerWtesc}>
       <WorkTimeEditScreen
         beginTime={beginTime}
         setBeginTime={setBeginTime}
@@ -28,12 +29,5 @@ const WorkTimeEditScreenContainer: React.FC<WscProps> = (props) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  parentContainer: {
-    flexDirection: 'column',
-    margin: 20,
-  },
-});
 
 export default WorkTimeEditScreenContainer;

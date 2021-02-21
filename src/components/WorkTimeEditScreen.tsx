@@ -1,7 +1,7 @@
 import React, {useState, Dispatch, Fragment, SetStateAction} from 'react';
 import {
   FlatList,
-  StyleSheet,
+  
   Text,
   View,
   TextInput,
@@ -14,6 +14,8 @@ import {
 } from 'react-native';
 import MyDatePicker from '../components/MyDatePicker';
 import MyTextInput from '../components/MyTextInput';
+import translations from '../other/Localization';
+const s = require('../other/myStyles');
 
 type WsProps = {
   selectedDate: string;
@@ -38,36 +40,36 @@ const WorkTimeEditScreen: React.FC<WsProps> = (props) => {
 
   return (
     <Fragment>
-      <Text style={styles.date}>Selected Day: {props.selectedDate}</Text>
-      <Text style={{textAlign: 'center'}}>
-        Every field has at least a time in hours and minutes.
+      <Text style={s.dateWtes}>
+        {translations.selectedDay} {props.selectedDate}
       </Text>
-      <View style={[styles.container]}>
+      <Text style={s.descText}>{translations.everyField}</Text>
+      <View style={[s.containerWtes]}>
         <ScrollView>
           <MyDatePicker
             timeType={TimeEnum.beginTime}
-            timeTypeString="Begin Time:"
+            timeTypeString={translations.beginTime}
             time={props.beginTime}
             setTime={props.setBeginTime}
           />
           <MyDatePicker
             timeType={TimeEnum.endTime}
-            timeTypeString="End Time:"
+            timeTypeString={translations.endTime}
             time={props.endTime}
             setTime={props.setEndTime}
           />
           <MyTextInput
             timeType={TimeEnum.dailyWorkEstimate}
-            timeTypeString="Daily Work Estimate:"
-            validationText="Example 29:45"
+            timeTypeString={translations.dailyWorkEstimate}
+            validationText={translations.eaxamplePlus}
             withMinus={false}
             time={props.dailyWorkEstimate}
             setTime={props.setDailyWorkEstimate}
           />
           <MyTextInput
             timeType={TimeEnum.workTimeTotal}
-            timeTypeString="Work Time Total:"
-            validationText="Example 29:45 or -9:45"
+            timeTypeString={translations.workTimeTotal}
+            validationText={translations.eaxamplePlusMinus}
             withMinus={true}
             time={props.workTimeTotal}
             setTime={props.setWorkTimeTotal}
@@ -77,19 +79,5 @@ const WorkTimeEditScreen: React.FC<WsProps> = (props) => {
     </Fragment>
   );
 };
-
-const styles = StyleSheet.create({
-  date: {
-    fontWeight: 'bold',
-    fontSize: 20,
-    textAlign: 'center',
-  },
-  container: {
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    paddingTop: 22,
-    marginBottom: 100,
-  },
-});
 
 export default WorkTimeEditScreen;

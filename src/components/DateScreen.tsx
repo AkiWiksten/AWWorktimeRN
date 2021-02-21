@@ -1,7 +1,9 @@
 import React, {Fragment, Dispatch, SetStateAction} from 'react';
 import CalendarPicker from 'react-native-calendar-picker';
-import {StyleSheet, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
+import translations from '../other/Localization';
+var s = require('../other/myStyles');
 
 type DsProps = {
   selectedDate: string;
@@ -29,39 +31,19 @@ const DateScreen: React.FC<DsProps> = (props) => {
   );
   return (
     <Fragment>
-      <View style={styles.container}>
-        <Text style={styles.selectedDate}>
-          Selected Day: {props.selectedDate}
+      <View style={s.container}>
+        <Text style={s.selectedDate}>
+          {translations.selectedDay}
+          {props.selectedDate}
         </Text>
         <CalendarPicker onDateChange={onDateChange} startFromMonday />
-        <Text style={styles.hours}>HOURS</Text>
-        <Text style={styles.stats}>Today: </Text>
-        <Text style={styles.stats}>This week: </Text>
-        <Text style={styles.stats}>This month: </Text>
+        <Text style={s.hours}>{translations.hours}</Text>
+        <Text style={s.stats}>{translations.today}</Text>
+        <Text style={s.stats}>{translations.thisWeek}</Text>
+        <Text style={s.stats}>{translations.thisMonth}</Text>
       </View>
     </Fragment>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-  },
-  selectedDate: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  hours: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  stats: {
-    fontSize: 14,
-  },
-});
 
 export default DateScreen;

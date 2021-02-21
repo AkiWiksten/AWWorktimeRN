@@ -1,7 +1,8 @@
 import React from 'react';
 import DateScreen from '../components/DateScreen';
-import {StyleSheet, View} from 'react-native';
+import {View} from 'react-native';
 import {SetStateAction, Dispatch} from 'react';
+const s = require('../other/myStyles');
 
 /*constructor(props) {
   super(props);
@@ -32,19 +33,10 @@ type DscProps = {
 
 const DateScreenContainer: React.FC<DscProps> = (props) => {
   return (
-    <View style={styles.container}>
+    <View style={s.containerDsc}>
       <DateScreen {...props} />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-  },
-});
 
 export default DateScreenContainer;

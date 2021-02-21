@@ -11,6 +11,7 @@ import {
   NavigationContainer,
   getFocusedRouteNameFromRoute,
 } from '@react-navigation/native';
+import translations from '../other/Localization';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -52,11 +53,11 @@ function MainContainer() {
 
     switch (routeName) {
       case 'Calendar':
-        return 'Select which date to edit';
+        return translations.whichDate;
       case 'Work Time':
-        return 'Edit work time fields';
+        return translations.workTime;
       case 'Projects':
-        return 'Projects';
+        return translations.selectProjects;
     }
   }
 

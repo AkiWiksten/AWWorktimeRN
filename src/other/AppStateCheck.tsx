@@ -5,7 +5,7 @@ import React, {
   Dispatch,
   SetStateAction,
 } from 'react';
-import {AppState, StyleSheet, Text, View} from 'react-native';
+import {AppState, Text, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {PromiseProvider} from 'mongoose';
 

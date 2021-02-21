@@ -1,6 +1,5 @@
 import React, {Dispatch, Fragment, SetStateAction} from 'react';
 import {useState} from 'react';
-import {StyleSheet} from 'react-native';
 import {
   FlatList,
   ScrollView,
@@ -10,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+const s = require('../other/myStyles');
 
 type PsProps = {
   selectedDate: string;
@@ -81,34 +81,31 @@ const ProjectsScreen: React.FC<PsProps> = (props) => {
   };
   return (
     <Fragment>
-      <Text style={styles.date}>Selected Day: {props.selectedDate}</Text>
+      <Text style={s.date}>Selected Day: {props.selectedDate}</Text>
       <FlatList
         data={data0}
         extraData={selectedId0}
         renderItem={({item}) => {
           return (
-            <View
-              style={selectedItem0 === item.id ? styles.item1 : styles.item0}>
+            <View style={selectedItem0 === item.id ? s.item1 : s.item0}>
               <TouchableHighlight
                 underlayColor="lightgreen"
                 onPress={() => handleClick0(item.id)}>
-                <Text style={styles.text0}>{item.key}</Text>
+                <Text style={s.text0}>{item.key}</Text>
               </TouchableHighlight>
-              <TextInput style={styles.textInput}>{item.time}</TextInput>
+              <TextInput style={s.textInput}>{item.time}</TextInput>
             </View>
           );
         }}
       />
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => copyButtonPressed()}>
-          <Text style={styles.buttonText}>Copy Project Up</Text>
+      <View style={s.buttonContainer}>
+        <TouchableOpacity style={s.button} onPress={() => copyButtonPressed()}>
+          <Text style={s.buttonText}>Copy Project Up</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={s.button}
           onPress={() => upperDeleteButtonPressed()}>
-          <Text style={styles.buttonText}>Delete Above</Text>
+          <Text style={s.buttonText}>Delete Above</Text>
         </TouchableOpacity>
       </View>
       <FlatList
@@ -116,94 +113,30 @@ const ProjectsScreen: React.FC<PsProps> = (props) => {
         extraData={selectedId1}
         renderItem={({item, index}) => {
           return (
-            <View style={selectedItem1 === index ? styles.item1 : styles.item0}>
+            <View style={selectedItem1 === index ? s.item1 : s.item0}>
               <TouchableHighlight
                 underlayColor="lightgreen"
                 onPress={() => handleClick1(index)}>
-                <Text style={styles.text0}>{item.key}</Text>
+                <Text style={s.text0}>{item.key}</Text>
               </TouchableHighlight>
             </View>
           );
         }}
       />
-      <View style={styles.buttonContainer}>
+      <View style={s.buttonContainer}>
         <TouchableOpacity
-          style={styles.button}
+          style={s.button}
           onPress={() => props.navigation.navigate('Details')}>
-          <Text style={styles.buttonText}>Create Project</Text>
+          <Text style={s.buttonText}>Create Project</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={s.button}
           onPress={() => lowerDeleteButtonPressed()}>
-          <Text style={styles.buttonText}>Delete</Text>
+          <Text style={s.buttonText}>Delete</Text>
         </TouchableOpacity>
       </View>
     </Fragment>
   );
 };
-const styles = StyleSheet.create({
-  buttonContainer: {
-    marginBottom: 10,
-    marginTop: 10,
-    flexDirection: 'row',
-  },
-  button: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'lightblue',
-    paddingBottom: 10,
-    paddingTop: 10,
-    marginLeft: 20,
-    marginRight: 20,
-    elevation: 5,
-  },
-  buttonText: {
-    fontWeight: 'bold',
-    fontSize: 20,
-    textAlign: 'center',
-  },
-  date: {
-    fontWeight: 'bold',
-    fontSize: 20,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    paddingTop: 22,
-    marginLeft: 10,
-  },
-  item0: {
-    paddingLeft: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
-  },
-  item1: {
-    paddingLeft: 10,
-    backgroundColor: 'lightgreen',
-    paddingTop: 10,
-    paddingBottom: 10,
-  },
-  text0: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    marginBottom: 0,
-    paddingBottom: 0,
-  },
-  textInput: {
-    fontSize: 16,
-    marginTop: 0,
-    paddingTop: 0,
-    marginBottom: 0,
-    paddingBottom: 0,
-  },
-  details: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 
 export default ProjectsScreen;
