@@ -22,8 +22,8 @@ type MtiProps = {
 const MyTextInput: React.FC<MtiProps> = (props) => {
   const {control, handleSubmit, errors} = useForm();
   const onSubmit = (d: any) => {
-    console.log('onSubmit:', d);
-    props.setTime(d);
+    console.log('onSubmit:', d.dweName);
+    props.setTime(d.dweName);
   };
   const onPressTitle = () => {};
   return (

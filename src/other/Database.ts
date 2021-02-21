@@ -85,6 +85,7 @@ export const UpdateCurrentWorkDay = (
   dailyWorkEstimate: string,
   workTimeTotal: string,
 ) => {
+  console.log('UpdateCurrentWorkDay: ', workTimeTotal);
   openMyDatabase().transaction(function (tx) {
     tx.executeSql(
       'INSERT INTO WorkTime (BeginTime, EndTime, DailyWorkEstimate) VALUES (?,?,?)',
@@ -138,15 +139,13 @@ export const ReadCurrentWorkDay = (
   setDailyWorkEstimate: Dispatch<SetStateAction<string>>,
   setWorkTimeTotal: Dispatch<SetStateAction<string>>,
 ) => {
-  useEffect(() => {
-    openMyDatabase().transaction((tx) => {
-      tx.executeSql('SELECT * FROM WorkTimeOnce', [], (tx, results) => {
-        var temp = [];
-        for (let i = 0; i < results.rows.length; ++i) {
-          temp.push(results.rows.item(i));
-        }
-        setFlatListItems(temp);
-      });
+  openMyDatabase().transaction((tx) => {
+    tx.executeSql('SELECT * FROM WorkTimeOnce', [], (tx, results) => {
+      var temp = [];
+      for (let i = 0; i < results.rows.length; ++i) {
+        temp.push(results.rows.item(i));
+      }
+      console.log('ReadCurrentWorkDay: ', temp);
     });
-  }, []);
+  });
 };

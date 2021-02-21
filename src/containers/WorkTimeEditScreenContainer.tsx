@@ -1,7 +1,7 @@
 import React, {Dispatch, SetStateAction, useState} from 'react';
 import {View} from 'react-native';
 import WorkTimeEditScreen from '../components/WorkTimeEditScreen';
-import {UpdateCurrentWorkDay} from '../other/Database';
+import {ReadCurrentWorkDay, UpdateCurrentWorkDay} from '../other/Database';
 const s = require('../other/myStyles');
 
 type WscProps = {
@@ -15,9 +15,11 @@ const WorkTimeEditScreenContainer: React.FC<WscProps> = (props) => {
   const [dailyWorkEstimate, setDailyWorkEstimate] = useState('7:30');
   const [workTimeTotal, setWorkTimeTotal] = useState('0:00');
   const screenUnfocused = () => {
+    console.log('screenUnfocused: ', workTimeTotal);
     UpdateCurrentWorkDay(beginTime, endTime, dailyWorkEstimate, workTimeTotal);
   };
   const screenFocused = () => {
+    console.log('screenFocused: ', workTimeTotal);
     ReadCurrentWorkDay(
       setBeginTime,
       setEndTime,
@@ -25,6 +27,8 @@ const WorkTimeEditScreenContainer: React.FC<WscProps> = (props) => {
       setWorkTimeTotal,
     );
   };
+  
+  console.log('WorkTimeEditScreenContainer: ', workTimeTotal);
   return (
     <View style={s.parentContainerWtesc}>
       <WorkTimeEditScreen
