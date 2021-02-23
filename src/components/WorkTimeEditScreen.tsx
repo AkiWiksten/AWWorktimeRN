@@ -51,7 +51,7 @@ const WorkTimeEditScreen: React.FC<WsProps> = (props) => {
         props.screenUnfocused();
         console.log('useFocusEffect: WorkTimeEditScreen is not focused');
       };
-    }, [props.workTimeTotal || props.dailyWorkEstimate]),
+    }, []),
   );
   console.log('WorkTimeEditScreen', props.workTimeTotal);
   return (

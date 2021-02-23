@@ -128,7 +128,6 @@ function MainContainer() {
           })}
         />
       </Stack.Navigator>
-      <AppStateCheck selectedDate={date} setSelectedDate={setDate} />
     </Fragment>
   );
 }

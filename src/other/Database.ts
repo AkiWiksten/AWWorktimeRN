@@ -80,6 +80,7 @@ export const InitDatabase = () => {
 };
 
 export const UpdateCurrentWorkDay = (
+  selectedDate: string,
   beginTime: string,
   endTime: string,
   dailyWorkEstimate: string,
@@ -88,8 +89,8 @@ export const UpdateCurrentWorkDay = (
   console.log('UpdateCurrentWorkDay: ', workTimeTotal);
   openMyDatabase().transaction(function (tx) {
     tx.executeSql(
-      'INSERT INTO WorkTime (BeginTime, EndTime, DailyWorkEstimate) VALUES (?,?,?)',
-      [beginTime, endTime, dailyWorkEstimate],
+      'INSERT INTO WorkTime (Date, BeginTime, EndTime, DailyWorkEstimate) VALUES (?,?,?,?)',
+      [selectedDate, beginTime, endTime, dailyWorkEstimate],
       (tx, results) => {
         console.log('Results', results.rowsAffected);
         if (results.rowsAffected > 0) {
@@ -134,18 +135,37 @@ export const UpdateCurrentWorkDay = (
 };
 
 export const ReadCurrentWorkDay = (
+  selectedDate: string,
   setBeginTime: Dispatch<SetStateAction<string>>,
   setEndTime: Dispatch<SetStateAction<string>>,
   setDailyWorkEstimate: Dispatch<SetStateAction<string>>,
   setWorkTimeTotal: Dispatch<SetStateAction<string>>,
 ) => {
+  console.log()
   openMyDatabase().transaction((tx) => {
     tx.executeSql('SELECT * FROM WorkTimeOnce', [], (tx, results) => {
       var temp = [];
       for (let i = 0; i < results.rows.length; ++i) {
         temp.push(results.rows.item(i));
       }
-      console.log('ReadCurrentWorkDay: ', temp);
+      console.log('ReadCurrentWorkDay0: ', temp);
+      setWorkTimeTotal(temp[0].WorkTimeTotal);
     });
+  });
+  openMyDatabase().transaction((tx) => {
+    tx.executeSql(
+      'SELECT * FROM WorkHour WHERE Date = ?',
+      [selectedDate],
+      (tx, results) => {
+        var temp = [];
+        for (let i = 0; i < results.rows.length; ++i) {
+          temp.push(results.rows.item(i));
+        }
+        console.log('ReadCurrentWorkDay1: ', temp);
+        setBeginTime(temp[0].BeginTime);
+        setEndTime(temp[0].EndTime);
+        setDailyWorkEstimate(temp[0].DailyWorkEstimate);
+      },
+    );
   });
 };
