@@ -18,32 +18,11 @@ const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 function MainContainer() {
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@selectedDateKey');
-      if (value !== null) {
-        // value previously stored
-        console.log('getData', value);
-        setDate(value);
-      } else {
-        var date0 = new Date();
-        var date1 =
-          date0.getDate() +
-          '.' +
-          (date0.getMonth() + 1) +
-          '.' +
-          date0.getFullYear();
-        setDate(date1);
-      }
-    } catch (e) {
-      // error reading value
-    }
-  };
-  useEffect(() => {
-    getData();
-  }, []);
-
   const [date, setDate] = useState('');
+  const [beginTime, setBeginTime] = useState('8:00');
+  const [endTime, setEndTime] = useState('16:00');
+  const [dailyWorkEstimate, setDailyWorkEstimate] = useState('7:30');
+  const [workTimeTotal, setWorkTimeTotal] = useState('0:00');
   console.log('MainContainer: ', date);
 
   function getHeaderTitle(route: any) {
@@ -101,6 +80,14 @@ function MainContainer() {
             <WorkTimeEditScreenContainer
               selectedDate={date}
               setSelectedDate={setDate}
+              beginTime={beginTime}
+              setBeginTime={setBeginTime}
+              endTime={endTime}
+              setEndTime={setEndTime}
+              dailyWorkEstimate={dailyWorkEstimate}
+              setDailyWorkEstimate={setDailyWorkEstimate}
+              workTimeTotal={workTimeTotal}
+              setWorkTimeTotal={setWorkTimeTotal}
             />
           )}
         />
@@ -117,6 +104,18 @@ function MainContainer() {
     );
   }
   InitDatabase();
+  AppStateCheck(
+    date,
+    setDate,
+    beginTime,
+    setBeginTime,
+    endTime,
+    setEndTime,
+    dailyWorkEstimate,
+    setDailyWorkEstimate,
+    workTimeTotal,
+    setWorkTimeTotal,
+  );
   return (
     <Fragment>
       <Stack.Navigator>

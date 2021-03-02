@@ -87,7 +87,8 @@ export const UpdateCurrentWorkDay = (
   workTimeTotal: string,
 ) => {
   console.log('UpdateCurrentWorkDay: ', workTimeTotal);
-  openMyDatabase().transaction(function (tx) {
+  let databaseOpened = openMyDatabase();
+  databaseOpened.transaction(function (tx) {
     tx.executeSql(
       'INSERT INTO WorkTime (Date, BeginTime, EndTime, DailyWorkEstimate) VALUES (?,?,?,?)',
       [selectedDate, beginTime, endTime, dailyWorkEstimate],
@@ -101,7 +102,7 @@ export const UpdateCurrentWorkDay = (
       },
     );
   });
-  openMyDatabase().transaction(function (tx) {
+  databaseOpened.transaction(function (tx) {
     tx.executeSql(
       'DELETE FROM WorkTimeOnce',
       [],
@@ -118,7 +119,7 @@ export const UpdateCurrentWorkDay = (
       },
     );
   });
-  openMyDatabase().transaction(function (tx) {
+  databaseOpened.transaction(function (tx) {
     tx.executeSql(
       'INSERT INTO WorkTimeOnce (WorkTimeTotal) VALUES (?)',
       [workTimeTotal],

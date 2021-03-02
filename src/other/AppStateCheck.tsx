@@ -8,22 +8,20 @@ import React, {
 import {AppState, Text, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {PromiseProvider} from 'mongoose';
-import { ReadCurrentWorkDay, UpdateCurrentWorkDay } from './Database';
+import {ReadCurrentWorkDay, UpdateCurrentWorkDay} from './Database';
 
-type AscProps = {
-  selectedDate: string;
-  setSelectedDate: Dispatch<SetStateAction<string>>;
-  beginTime: string;
-  setBeginTime: Dispatch<SetStateAction<string>>;
-  endTime: string;
-  setEndTime: Dispatch<SetStateAction<string>>;
-  dailyWorkEstimate: string;
-  setDailyWorkEstimate: Dispatch<SetStateAction<string>>;
-  workTimeTotal: string;
-  setWorkTimeTotal: Dispatch<SetStateAction<string>>;
-};
-
-const AppStateCheck: React.FC<AscProps> = (props) => {
+const AppStateCheck = (
+  selectedDate: string,
+  setSelectedDate: Dispatch<SetStateAction<string>>,
+  beginTime: string,
+  setBeginTime: Dispatch<SetStateAction<string>>,
+  endTime: string,
+  setEndTime: Dispatch<SetStateAction<string>>,
+  dailyWorkEstimate: string,
+  setDailyWorkEstimate: Dispatch<SetStateAction<string>>,
+  workTimeTotal: string,
+  setWorkTimeTotal: Dispatch<SetStateAction<string>>,
+) => {
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
@@ -33,7 +31,7 @@ const AppStateCheck: React.FC<AscProps> = (props) => {
     return () => {
       AppState.removeEventListener('change', _handleAppStateChange);
     };
-  }, [props]);
+  }, [selectedDate]);
 
   const _handleAppStateChange = (nextAppState: any) => {
     if (
@@ -43,19 +41,20 @@ const AppStateCheck: React.FC<AscProps> = (props) => {
       console.log('App has come to the foreground!');
       getData();
       ReadCurrentWorkDay(
-        props.selectedDate,
-        props.setBeginTime,
-        props.setEndTime,
-        props.setDailyWorkEstimate,
-        props.setWorkTimeTotal,
+        selectedDate,
+        setBeginTime,
+        setEndTime,
+        setDailyWorkEstimate,
+        setWorkTimeTotal,
       );
     } else {
+      console.log('App has gone to background!');
       UpdateCurrentWorkDay(
-        props.selectedDate,
-        props.beginTime,
-        props.endTime,
-        props.dailyWorkEstimate,
-        props.workTimeTotal,
+        selectedDate,
+        beginTime,
+        endTime,
+        dailyWorkEstimate,
+        workTimeTotal,
       );
       storeData();
     }
@@ -70,7 +69,7 @@ const AppStateCheck: React.FC<AscProps> = (props) => {
       const value = await AsyncStorage.getItem('@selectedDateKey');
       if (value !== null) {
         // value previously stored
-        props.setSelectedDate(value);
+        setSelectedDate(value);
       }
     } catch (e) {
       // error reading value
@@ -79,13 +78,12 @@ const AppStateCheck: React.FC<AscProps> = (props) => {
 
   const storeData = async () => {
     try {
-      console.log('storeData', props.selectedDate);
-      await AsyncStorage.setItem('@selectedDateKey', props.selectedDate);
+      console.log('storeData', selectedDate);
+      await AsyncStorage.setItem('@selectedDateKey', selectedDate);
     } catch (e) {
       // saving error
     }
   };
-  return <View />;
 };
 
 export default AppStateCheck;
