@@ -38,8 +38,8 @@ const MyDatePicker: React.FC<MdpProps> = (props) => {
 
   const handleConfirm = (selectedDate: Date) => {
     hideDatePicker();
-    let date0 = dateFormat(selectedDate, 'hh:MM');
-    console.log('handleConfirm: ', selectedDate);
+    let date0 = dateFormat(selectedDate, 'HH:MM');
+    console.log('handleConfirm: ', date0);
     props.setTime(date0);
   };
 
