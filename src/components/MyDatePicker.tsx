@@ -37,10 +37,10 @@ const MyDatePicker: React.FC<MdpProps> = (props) => {
   };
 
   const handleConfirm = (selectedDate: Date) => {
-    let date0 = dateFormat(selectedDate, 'h:MM');
-    console.warn('handleConfirm: ', date0);
-    props.setTime(date0);
     hideDatePicker();
+    let date0 = dateFormat(selectedDate, 'hh:MM');
+    console.log('handleConfirm: ', selectedDate);
+    props.setTime(date0);
   };
 
   const onPressTitle = () => {
@@ -61,6 +61,7 @@ const MyDatePicker: React.FC<MdpProps> = (props) => {
         mode="time"
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
+        is24Hour={true}
       />
     </Fragment>
   );

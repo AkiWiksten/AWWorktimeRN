@@ -17,18 +17,6 @@ const DateScreen: React.FC<DsProps> = (props) => {
       date._i.day + '.' + (date._i.month + 1) + '.' + date._i.year,
     );
   };
-  useFocusEffect(
-    React.useCallback(() => {
-      // Do something when the screen is focused
-      console.log('useFocusEffect: DateScreen is focused');
-      return () => {
-        // Do something when the screen is unfocused
-        // Useful for cleanup functions
-
-        console.log('useFocusEffect: DateScreen is not focused');
-      };
-    }, []),
-  );
   return (
     <Fragment>
       <View style={s.container}>

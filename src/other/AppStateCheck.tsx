@@ -27,11 +27,10 @@ const AppStateCheck = (
 
   useEffect(() => {
     AppState.addEventListener('change', _handleAppStateChange);
-    console.log('useEffect');
     return () => {
       AppState.removeEventListener('change', _handleAppStateChange);
     };
-  }, [selectedDate]);
+  });
 
   const _handleAppStateChange = (nextAppState: any) => {
     if (
@@ -61,7 +60,6 @@ const AppStateCheck = (
 
     appState.current = nextAppState;
     setAppStateVisible(appState.current);
-    console.log('AppState', appState.current);
   };
 
   const getData = async () => {

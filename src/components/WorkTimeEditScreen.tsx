@@ -38,7 +38,6 @@ const WorkTimeEditScreen: React.FC<WsProps> = (props) => {
     dailyWorkEstimate: 3,
     workTimeTotal: 10,
   });
-  console.log('WorkTimeEditScreen', props.workTimeTotal);
   return (
     <Fragment>
       <Text style={s.dateWtes}>

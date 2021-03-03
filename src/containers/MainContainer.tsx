@@ -23,7 +23,6 @@ function MainContainer() {
   const [endTime, setEndTime] = useState('16:00');
   const [dailyWorkEstimate, setDailyWorkEstimate] = useState('7:30');
   const [workTimeTotal, setWorkTimeTotal] = useState('0:00');
-  console.log('MainContainer: ', date);
 
   function getHeaderTitle(route: any) {
     // If the focused route is not found, we need to assume it's the initial screen
@@ -42,6 +41,7 @@ function MainContainer() {
   }
 
   function HomeTabs() {
+    console.log('HomeTabs:', beginTime);
     return (
       <Tab.Navigator
         screenOptions={({route}) => ({

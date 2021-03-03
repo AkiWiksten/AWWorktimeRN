@@ -17,8 +17,6 @@ type WscProps = {
 };
 
 const WorkTimeEditScreenContainer: React.FC<WscProps> = (props) => {
-
-  console.log('WorkTimeEditScreenContainer: ', props.workTimeTotal);
   return (
     <View style={s.parentContainerWtesc}>
       <WorkTimeEditScreen

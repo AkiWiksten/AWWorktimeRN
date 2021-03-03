@@ -142,8 +142,8 @@ export const ReadCurrentWorkDay = (
   setDailyWorkEstimate: Dispatch<SetStateAction<string>>,
   setWorkTimeTotal: Dispatch<SetStateAction<string>>,
 ) => {
-  console.log()
-  openMyDatabase().transaction((tx) => {
+  let databaseOpened = openMyDatabase();
+  databaseOpened.transaction((tx) => {
     tx.executeSql('SELECT * FROM WorkTimeOnce', [], (tx, results) => {
       var temp = [];
       for (let i = 0; i < results.rows.length; ++i) {
@@ -153,7 +153,7 @@ export const ReadCurrentWorkDay = (
       setWorkTimeTotal(temp[0].WorkTimeTotal);
     });
   });
-  openMyDatabase().transaction((tx) => {
+  databaseOpened.transaction((tx) => {
     tx.executeSql(
       'SELECT * FROM WorkHour WHERE Date = ?',
       [selectedDate],
