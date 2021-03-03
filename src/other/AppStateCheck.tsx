@@ -4,6 +4,7 @@ import React, {
   useState,
   Dispatch,
   SetStateAction,
+  useLayoutEffect,
 } from 'react';
 import {AppState, Text, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -23,39 +24,60 @@ const AppStateCheck = (
   setWorkTimeTotal: Dispatch<SetStateAction<string>>,
 ) => {
   const appState = useRef(AppState.currentState);
+  const updateState = useRef(false);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
-
+  const [updated, setUpdated] = useState(updateState.current);
   useEffect(() => {
+    /*console.log('useLayoutEffect0: ', firstUpdate.current);
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      console.log('useLayoutEffect1: ', firstUpdate.current);
+      return;
+    }
+    console.log('useLayoutEffect2: ', firstUpdate.current);*/
     AppState.addEventListener('change', _handleAppStateChange);
     return () => {
       AppState.removeEventListener('change', _handleAppStateChange);
     };
-  });
+  }, []);
 
   const _handleAppStateChange = (nextAppState: any) => {
     if (
       appState.current.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
-      console.log('App has come to the foreground!');
+      console.log('App has come to the foreground!:', appState.current);
       getData();
       ReadCurrentWorkDay(
         selectedDate,
+        setSelectedDate,
+        beginTime,
         setBeginTime,
+        endTime,
         setEndTime,
+        dailyWorkEstimate,
         setDailyWorkEstimate,
+        workTimeTotal,
         setWorkTimeTotal,
       );
-    } else {
-      console.log('App has gone to background!');
-      UpdateCurrentWorkDay(
-        selectedDate,
-        beginTime,
-        endTime,
-        dailyWorkEstimate,
-        workTimeTotal,
-      );
-      storeData();
+    } else if (
+      appState.current.match(/active/) &&
+      nextAppState === ('background' || 'inactive')
+    ) {
+      if (!updated) {
+        console.log('App has gone to background!0:', updateState.current);
+        setUpdated(true);
+      } else {
+        console.log('App has gone to background!1:', updateState.current);
+        UpdateCurrentWorkDay(
+          selectedDate,
+          beginTime,
+          endTime,
+          dailyWorkEstimate,
+          workTimeTotal,
+        );
+        storeData();
+      }
     }
 
     appState.current = nextAppState;

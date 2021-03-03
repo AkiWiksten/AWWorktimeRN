@@ -12,7 +12,8 @@ import {
   getFocusedRouteNameFromRoute,
 } from '@react-navigation/native';
 import translations from '../other/Localization';
-import {InitDatabase} from '../other/Database';
+import {InitDatabase, ReadCurrentWorkDay} from '../other/Database';
+import {AppState} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -23,6 +24,34 @@ function MainContainer() {
   const [endTime, setEndTime] = useState('16:00');
   const [dailyWorkEstimate, setDailyWorkEstimate] = useState('7:30');
   const [workTimeTotal, setWorkTimeTotal] = useState('0:00');
+  console.log('date: ', date);
+
+  useEffect(() => {
+    ReadCurrentWorkDay(
+      date,
+      setDate,
+      beginTime,
+      setBeginTime,
+      endTime,
+      setEndTime,
+      dailyWorkEstimate,
+      setDailyWorkEstimate,
+      workTimeTotal,
+      setWorkTimeTotal,
+    );
+    setCurrentDate();
+  }, [date]);
+
+  const setCurrentDate = () => {
+    var date0 = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+
+    let finalDate = date0 + '.' + month + '.' + year;
+    if (date === '') {
+      setDate(finalDate);
+    }
+  };
 
   function getHeaderTitle(route: any) {
     // If the focused route is not found, we need to assume it's the initial screen
@@ -103,8 +132,9 @@ function MainContainer() {
       </Tab.Navigator>
     );
   }
+  
   InitDatabase();
-  AppStateCheck(
+  /*AppStateCheck(
     date,
     setDate,
     beginTime,
@@ -115,7 +145,7 @@ function MainContainer() {
     setDailyWorkEstimate,
     workTimeTotal,
     setWorkTimeTotal,
-  );
+  );*/
   return (
     <Fragment>
       <Stack.Navigator>

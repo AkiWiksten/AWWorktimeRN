@@ -1,6 +1,7 @@
 import React, {Dispatch, SetStateAction, useState} from 'react';
 import {View} from 'react-native';
 import WorkTimeEditScreen from '../components/WorkTimeEditScreen';
+import AppStateCheck from '../other/AppStateCheck';
 const s = require('../other/myStyles');
 
 type WscProps = {
@@ -17,6 +18,7 @@ type WscProps = {
 };
 
 const WorkTimeEditScreenContainer: React.FC<WscProps> = (props) => {
+  
   return (
     <View style={s.parentContainerWtesc}>
       <WorkTimeEditScreen

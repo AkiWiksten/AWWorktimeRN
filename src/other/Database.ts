@@ -3,6 +3,7 @@ import React, {useEffect} from 'react';
 import {Alert} from 'react-native';
 import {Dispatch} from 'react';
 import {SetStateAction} from 'react';
+import AppStateCheck from './AppStateCheck';
 
 const dbName = 'workTime.db';
 const errorCB = (err: any) => {
@@ -119,6 +120,7 @@ export const UpdateCurrentWorkDay = (
       },
     );
   });
+  console.log('UpdateCurrentWorkDay0: ');
   databaseOpened.transaction(function (tx) {
     tx.executeSql(
       'INSERT INTO WorkTimeOnce (WorkTimeTotal) VALUES (?)',
@@ -137,11 +139,17 @@ export const UpdateCurrentWorkDay = (
 
 export const ReadCurrentWorkDay = (
   selectedDate: string,
+  setSelectedDate: Dispatch<SetStateAction<string>>,
+  beginTime: string,
   setBeginTime: Dispatch<SetStateAction<string>>,
+  endTime: string,
   setEndTime: Dispatch<SetStateAction<string>>,
+  dailyWorkEstimate: string,
   setDailyWorkEstimate: Dispatch<SetStateAction<string>>,
+  workTimeTotal: string,
   setWorkTimeTotal: Dispatch<SetStateAction<string>>,
 ) => {
+  console.log('ReadCurrentWorkDay-1: ', selectedDate);
   let databaseOpened = openMyDatabase();
   databaseOpened.transaction((tx) => {
     tx.executeSql('SELECT * FROM WorkTimeOnce', [], (tx, results) => {
@@ -151,14 +159,29 @@ export const ReadCurrentWorkDay = (
       }
       console.log('ReadCurrentWorkDay0: ', temp);
       setWorkTimeTotal(temp[0].WorkTimeTotal);
+      //console.log('ReadCurrentWorkDay0.5: ', temp[0].WorkTimeTotal);
+      /*AppStateCheck(
+        selectedDate,
+        setSelectedDate,
+        beginTime,
+        setBeginTime,
+        endTime,
+        setEndTime,
+        dailyWorkEstimate,
+        setDailyWorkEstimate,
+        workTimeTotal,
+        setWorkTimeTotal,
+      );*/
     });
   });
+  //console.log('ReadCurrentWorkDay0.6: ', selectedDate);
   databaseOpened.transaction((tx) => {
     tx.executeSql(
-      'SELECT * FROM WorkHour WHERE Date = ?',
+      'SELECT * FROM WorkHour WHERE Date = (?)',
       [selectedDate],
       (tx, results) => {
         var temp = [];
+        //console.log('ReadCurrentWorkDay0.7: ', results);
         for (let i = 0; i < results.rows.length; ++i) {
           temp.push(results.rows.item(i));
         }
@@ -166,6 +189,9 @@ export const ReadCurrentWorkDay = (
         setBeginTime(temp[0].BeginTime);
         setEndTime(temp[0].EndTime);
         setDailyWorkEstimate(temp[0].DailyWorkEstimate);
+      },
+      (tx, err) => {
+        console.log('ReadCurrentWorkDay1.1:', err);
       },
     );
   });
