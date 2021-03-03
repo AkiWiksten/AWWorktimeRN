@@ -19,18 +19,6 @@ type DscProps = {
 };
 
 const DateScreenContainer: React.FC<DscProps> = (props) => {
-  AppStateCheck(
-    props.selectedDate,
-    props.setSelectedDate,
-    props.beginTime,
-    props.setBeginTime,
-    props.endTime,
-    props.setEndTime,
-    props.dailyWorkEstimate,
-    props.setDailyWorkEstimate,
-    props.workTimeTotal,
-    props.setWorkTimeTotal,
-  );
   return (
     <View style={s.containerDsc}>
       <DateScreen {...props} />

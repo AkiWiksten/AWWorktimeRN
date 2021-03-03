@@ -1,4 +1,4 @@
-import React, {useState, Fragment, useEffect} from 'react';
+import React, {useState, Fragment, useEffect, useRef} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import DateScreenContainer from './DateScreenContainer';
@@ -12,7 +12,11 @@ import {
   getFocusedRouteNameFromRoute,
 } from '@react-navigation/native';
 import translations from '../other/Localization';
-import {InitDatabase, ReadCurrentWorkDay} from '../other/Database';
+import {
+  InitDatabase,
+  ReadCurrentWorkDay,
+  UpdateCurrentWorkDay,
+} from '../other/Database';
 import {AppState} from 'react-native';
 
 const Tab = createBottomTabNavigator();
@@ -132,20 +136,83 @@ function MainContainer() {
       </Tab.Navigator>
     );
   }
-  
+
   InitDatabase();
-  /*AppStateCheck(
-    date,
-    setDate,
-    beginTime,
-    setBeginTime,
-    endTime,
-    setEndTime,
-    dailyWorkEstimate,
-    setDailyWorkEstimate,
-    workTimeTotal,
-    setWorkTimeTotal,
-  );*/
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  useEffect(() => {
+    /*console.log('useLayoutEffect0: ', firstUpdate.current);
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      console.log('useLayoutEffect1: ', firstUpdate.current);
+      return;
+    }
+    console.log('useLayoutEffect2: ', firstUpdate.current);*/
+    AppState.addEventListener('change', _handleAppStateChange);
+    return () => {
+      AppState.removeEventListener('change', _handleAppStateChange);
+    };
+  }, []);
+
+  const _handleAppStateChange = (nextAppState: any) => {
+    if (
+      appState.current.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
+      console.log('App has come to the foreground!:', appState.current);
+      getData();
+      ReadCurrentWorkDay(
+        date,
+        setDate,
+        beginTime,
+        setBeginTime,
+        endTime,
+        setEndTime,
+        dailyWorkEstimate,
+        setDailyWorkEstimate,
+        workTimeTotal,
+        setWorkTimeTotal,
+      );
+    } else if (
+      appState.current.match(/active/) &&
+      nextAppState === ('background' || 'inactive')
+    ) {
+      console.log('App has gone to background!0:', appState.current);
+      UpdateCurrentWorkDay(
+        date,
+        beginTime,
+        endTime,
+        dailyWorkEstimate,
+        workTimeTotal,
+      );
+      storeData();
+    }
+
+    appState.current = nextAppState;
+    setAppStateVisible(appState.current);
+  };
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@selectedDateKey');
+      if (value !== null) {
+        // value previously stored
+        setDate(value);
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  const storeData = async () => {
+    try {
+      console.log('storeData', date);
+      await AsyncStorage.setItem('@selectedDateKey', date);
+    } catch (e) {
+      // saving error
+    }
+  };
+
   return (
     <Fragment>
       <Stack.Navigator>
