@@ -159,19 +159,6 @@ export const ReadCurrentWorkDay = (
       }
       console.log('ReadCurrentWorkDay0: ', temp);
       setWorkTimeTotal(temp[0].WorkTimeTotal);
-      //console.log('ReadCurrentWorkDay0.5: ', temp[0].WorkTimeTotal);
-      /*AppStateCheck(
-        selectedDate,
-        setSelectedDate,
-        beginTime,
-        setBeginTime,
-        endTime,
-        setEndTime,
-        dailyWorkEstimate,
-        setDailyWorkEstimate,
-        workTimeTotal,
-        setWorkTimeTotal,
-      );*/
     });
   });
   //console.log('ReadCurrentWorkDay0.6: ', selectedDate);

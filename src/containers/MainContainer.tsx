@@ -31,20 +31,9 @@ function MainContainer() {
   console.log('date: ', date);
 
   useEffect(() => {
-    ReadCurrentWorkDay(
-      date,
-      setDate,
-      beginTime,
-      setBeginTime,
-      endTime,
-      setEndTime,
-      dailyWorkEstimate,
-      setDailyWorkEstimate,
-      workTimeTotal,
-      setWorkTimeTotal,
-    );
-    setCurrentDate();
-  }, [date]);
+    getData();
+    
+  }, []);
 
   const setCurrentDate = () => {
     var date0 = new Date().getDate();
@@ -104,6 +93,14 @@ function MainContainer() {
             <DateScreenContainer
               selectedDate={date}
               setSelectedDate={setDate}
+              beginTime={beginTime}
+              setBeginTime={setBeginTime}
+              endTime={endTime}
+              setEndTime={setEndTime}
+              dailyWorkEstimate={dailyWorkEstimate}
+              setDailyWorkEstimate={setDailyWorkEstimate}
+              workTimeTotal={workTimeTotal}
+              setWorkTimeTotal={setWorkTimeTotal}
             />
           )}
         />
@@ -138,21 +135,16 @@ function MainContainer() {
   }
 
   InitDatabase();
-  const appState = useRef(AppState.currentState);
+  /*const appState = useRef(AppState.currentState);
+  const count = useRef(0);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
   useEffect(() => {
-    /*console.log('useLayoutEffect0: ', firstUpdate.current);
-    if (firstUpdate.current) {
-      firstUpdate.current = false;
-      console.log('useLayoutEffect1: ', firstUpdate.current);
-      return;
-    }
-    console.log('useLayoutEffect2: ', firstUpdate.current);*/
+    console.log('MainContainer66: ', count.current);
     AppState.addEventListener('change', _handleAppStateChange);
     return () => {
       AppState.removeEventListener('change', _handleAppStateChange);
     };
-  }, []);
+  });
 
   const _handleAppStateChange = (nextAppState: any) => {
     if (
@@ -173,31 +165,49 @@ function MainContainer() {
         workTimeTotal,
         setWorkTimeTotal,
       );
-    } else if (
-      appState.current.match(/active/) &&
-      nextAppState === ('background' || 'inactive')
-    ) {
-      console.log('App has gone to background!0:', appState.current);
-      UpdateCurrentWorkDay(
-        date,
-        beginTime,
-        endTime,
-        dailyWorkEstimate,
-        workTimeTotal,
-      );
-      storeData();
+    } else {
+      console.log('App has gone to background!2:', count.current);
+      if (count.current > 0) {
+        console.log('App has gone to background!0:', appState.current);
+        UpdateCurrentWorkDay(
+          date,
+          beginTime,
+          endTime,
+          dailyWorkEstimate,
+          workTimeTotal,
+        );
+        storeData();
+      } else {
+        console.log('App has gone to background!1:', appState.current);
+        count.current++;
+      }
     }
 
     appState.current = nextAppState;
     setAppStateVisible(appState.current);
-  };
+  };*/
 
   const getData = async () => {
+    console.log('getData', date);
     try {
       const value = await AsyncStorage.getItem('@selectedDateKey');
       if (value !== null) {
         // value previously stored
         setDate(value);
+        ReadCurrentWorkDay(
+          date,
+          setDate,
+          beginTime,
+          setBeginTime,
+          endTime,
+          setEndTime,
+          dailyWorkEstimate,
+          setDailyWorkEstimate,
+          workTimeTotal,
+          setWorkTimeTotal,
+        );
+      } else {
+        setCurrentDate();
       }
     } catch (e) {
       // error reading value
