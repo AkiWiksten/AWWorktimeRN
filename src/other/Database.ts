@@ -3,14 +3,13 @@ import React, {useEffect} from 'react';
 import {Alert} from 'react-native';
 import {Dispatch} from 'react';
 import {SetStateAction} from 'react';
-import AppStateCheck from './AppStateCheck';
 
 const dbName = 'workTime.db';
 const errorCB = (err: any) => {
   console.log('SQL Error: ' + err);
 };
 
-const successCB = (message) => {
+const successCB = (message: any) => {
   console.log('SQL executed fine: ' + message);
 };
 
